@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pelatihan Literasi AI IPB University</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .ipb-gradient {
+            background: linear-gradient(135deg, #002D5B 0%, #004b96 100%);
+        }
+        .quiz-container {
+            max-width: 650px;
+        }
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+ const questionsData = [
+    // SEKSI A: DASAR-DASAR AI (1–10)
+    { topic: "Dasar AI", type: "single", question: "Dalam konteks modul ini, Artificial Intelligence (AI) adalah teknologi yang mampu:", options: ["Menggantikan semua pekerjaan manusia", "Melakukan tugas yang biasanya membutuhkan kecerdasan manusia", "Mempercepat koneksi internet", "Menghapus data secara otomatis"], answer: "Melakukan tugas yang biasanya membutuhkan kecerdasan manusia", explanation: "AI adalah sistem komputer yang dapat melakukan tugas seperti memahami bahasa, mengenali pola, dan membuat prediksi." },
+
+    { topic: "Dasar AI", type: "single", question: "Mengapa data sangat penting dalam pengembangan AI?", options: ["Karena AI belajar dari pola dalam data", "Karena data membuat komputer lebih mahal", "Karena data menggantikan manusia", "Karena data mempercepat internet"], answer: "Karena AI belajar dari pola dalam data", explanation: "Semakin banyak dan berkualitas data yang digunakan, semakin baik AI dalam mengenali pola." },
+
+    { topic: "Dasar AI", type: "single", question: "Machine Learning adalah metode AI yang memungkinkan sistem:", options: ["Belajar dari data", "Menghapus file lama", "Mengganti pegawai", "Mengatur jaringan internet"], answer: "Belajar dari data", explanation: "Machine Learning memungkinkan komputer mempelajari pola dari data tanpa diprogram secara detail." },
+
+    { topic: "Dasar AI", type: "single", question: "Deep Learning merupakan bagian dari:", options: ["Machine Learning", "Database", "Internet", "Hardware komputer"], answer: "Machine Learning", explanation: "Deep Learning adalah teknik dalam Machine Learning yang menggunakan jaringan saraf tiruan." },
+
+    { topic: "Dasar AI", type: "single", question: "Generative AI adalah jenis AI yang dapat:", options: ["Membuat konten baru seperti teks atau gambar", "Menghapus data server", "Memperbaiki komputer rusak", "Mengganti kebijakan pemerintah"], answer: "Membuat konten baru seperti teks atau gambar", explanation: "Contoh Generative AI adalah ChatGPT yang mampu membuat teks atau ringkasan." },
+
+    { topic: "Dasar AI", type: "single", question: "Sistem rekomendasi film di Netflix adalah contoh penggunaan:", options: ["Artificial Intelligence", "Sistem manual", "Internet biasa", "Spreadsheet"], answer: "Artificial Intelligence", explanation: "AI digunakan untuk mempelajari preferensi pengguna dan memberikan rekomendasi." },
+
+    { topic: "Dasar AI", type: "single", question: "Artificial Intelligence mulai dikembangkan sejak:", options: ["1950-an", "1980-an", "2000-an", "2015"], answer: "1950-an", explanation: "Penelitian AI sudah dimulai sejak tahun 1950-an." },
+
+    { topic: "Dasar AI", type: "single", question: "AI tidak benar-benar berpikir seperti manusia, tetapi bekerja dengan cara:", options: ["Meniru emosi manusia", "Mempelajari pola data", "Menghafal semua data", "Menggunakan insting"], answer: "Mempelajari pola data", explanation: "AI menggunakan algoritma untuk mengenali pola dalam data." },
+
+    { topic: "Dasar AI", type: "single", question: "Aplikasi penerjemah bahasa otomatis merupakan contoh AI dalam bidang:", options: ["Pemahaman bahasa", "Pengolahan gambar", "Pengolahan angka", "Pengolahan suara"], answer: "Pemahaman bahasa", explanation: "AI yang memahami bahasa manusia disebut Natural Language Processing." },
+
+    { topic: "Dasar AI", type: "single", question: "Memahami jenis-jenis AI penting agar kita:", options: ["Mengerti cara AI bekerja", "Mengetahui harga komputer", "Mengetahui lokasi server", "Mengetahui pembuat AI"], answer: "Mengerti cara AI bekerja", explanation: "Dengan memahami jenis AI kita dapat mengetahui bagaimana sistem memproses data." },
+
+    // SEKSI B: LITERASI AI (11–20)
+
+    { topic: "Literasi AI", type: "single", question: "Literasi AI bagi ASN berarti kemampuan untuk:", options: ["Menghindari teknologi", "Memahami dan menggunakan AI secara bijak", "Membuat robot sendiri", "Memperbaiki komputer"], answer: "Memahami dan menggunakan AI secara bijak", explanation: "Literasi AI mencakup pemahaman teknologi, etika, dan risiko penggunaan AI." },
+
+    { topic: "Literasi AI", type: "single", question: "Ketika menerima hasil dari sistem AI, ASN sebaiknya:", options: ["Langsung mempercayainya", "Mengevaluasi apakah hasilnya masuk akal", "Menghapusnya", "Mengabaikannya"], answer: "Mengevaluasi apakah hasilnya masuk akal", explanation: "Output AI perlu ditinjau kembali karena tidak selalu benar." },
+
+    { topic: "Literasi AI", type: "single", question: "Menjadi pengguna aktif AI berarti ASN:", options: ["Hanya menerima hasil AI", "Memahami kegunaan dan batasan AI", "Menolak teknologi", "Harus bisa membuat AI"], answer: "Memahami kegunaan dan batasan AI", explanation: "Pengguna aktif memahami kapan AI digunakan dan apa batasannya." },
+
+    { topic: "Literasi AI", type: "single", question: "AI unggul dalam:", options: ["Memproses data besar dengan cepat", "Memiliki empati", "Memahami nilai budaya", "Membuat keputusan etis"], answer: "Memproses data besar dengan cepat", explanation: "Keunggulan AI adalah kecepatan dalam menganalisis data besar." },
+
+    { topic: "Literasi AI", type: "single", question: "Kemampuan memahami kualitas dan sumber data disebut:", options: ["Literasi Data", "Literasi Bahasa", "Literasi Budaya", "Literasi Politik"], answer: "Literasi Data", explanation: "Literasi data membantu memastikan data yang digunakan berkualitas." },
+
+    { topic: "Literasi AI", type: "single", question: "Output AI tidak boleh dianggap sebagai:", options: ["Rekomendasi", "Informasi awal", "Kebenaran mutlak", "Bahan pertimbangan"], answer: "Kebenaran mutlak", explanation: "Output AI tetap perlu dievaluasi oleh manusia." },
+
+    { topic: "Literasi AI", type: "single", question: "Kesadaran terhadap keamanan data dan privasi termasuk dalam:", options: ["Literasi Digital", "Literasi Budaya", "Literasi Bahasa", "Literasi Seni"], answer: "Literasi Digital", explanation: "Literasi digital mencakup keamanan siber dan perlindungan data." },
+
+    { topic: "Literasi AI", type: "single", question: "Literasi komputasi membantu ASN memahami:", options: ["Cara algoritma bekerja", "Harga komputer", "Cara merakit server", "Cara memperbaiki printer"], answer: "Cara algoritma bekerja", explanation: "ASN perlu memahami logika dasar AI walaupun tidak harus bisa coding." },
+
+    { topic: "Literasi AI", type: "single", question: "Jika data yang digunakan AI bias, maka kemungkinan:", options: ["Hasil AI juga bias", "AI berhenti bekerja", "AI menghapus data", "AI menjadi lebih cepat"], answer: "Hasil AI juga bias", explanation: "Bias data dapat menghasilkan keputusan yang tidak adil." },
+
+    { topic: "Literasi AI", type: "single", question: "Menghindari bias dalam AI penting agar pelayanan publik:", options: ["Lebih cepat saja", "Lebih adil bagi masyarakat", "Lebih murah", "Lebih sederhana"], answer: "Lebih adil bagi masyarakat", explanation: "AI yang bias dapat menyebabkan ketidakadilan dalam pelayanan publik." },
+
+    // SEKSI C: DIGITAL MINDSET (21–30)
+
+    { topic: "Digital Mindset", type: "single", question: "Digital mindset adalah pola pikir yang:", options: ["Menolak perubahan teknologi", "Terbuka terhadap inovasi teknologi", "Menghindari komputer", "Hanya fokus pada pekerjaan manual"], answer: "Terbuka terhadap inovasi teknologi", explanation: "Digital mindset membuat ASN siap beradaptasi dengan teknologi baru." },
+
+    { topic: "Digital Mindset", type: "single", question: "AI dapat membantu ASN dengan cara:", options: ["Menggantikan seluruh pekerjaan", "Mengurangi pekerjaan rutin", "Menghapus data masyarakat", "Menghilangkan rapat"], answer: "Mengurangi pekerjaan rutin", explanation: "AI membantu mengotomatisasi pekerjaan administratif yang berulang." },
+
+    { topic: "Digital Mindset", type: "single", question: "Keputusan akhir dalam pelayanan publik tetap harus diambil oleh:", options: ["AI", "Sistem komputer", "Manusia (ASN)", "Internet"], answer: "Manusia (ASN)", explanation: "AI hanya memberikan rekomendasi, keputusan tetap pada manusia." },
+
+    { topic: "Digital Mindset", type: "single", question: "Dalam pemerintahan, AI berperan sebagai:", options: ["Pengganti ASN", "Sistem pendukung keputusan", "Mesin pencetak dokumen", "Alat hiburan"], answer: "Sistem pendukung keputusan", explanation: "AI membantu memberikan analisis untuk mendukung pengambilan keputusan." },
+
+    { topic: "Digital Mindset", type: "single", question: "Salah satu manfaat AI dalam pemerintahan adalah:", options: ["Mempercepat analisis data kebijakan", "Menghapus kebijakan", "Mengurangi pegawai", "Menghilangkan rapat"], answer: "Mempercepat analisis data kebijakan", explanation: "AI mampu menganalisis data lebih cepat dibandingkan cara manual." },
+
+    { topic: "Digital Mindset", type: "single", question: "ASN yang adaptif terhadap teknologi akan:", options: ["Menolak sistem baru", "Belajar menggunakan teknologi baru", "Menghindari komputer", "Kembali ke sistem manual"], answer: "Belajar menggunakan teknologi baru", explanation: "Sikap adaptif penting dalam transformasi digital." },
+
+    { topic: "Digital Mindset", type: "single", question: "AI dapat meningkatkan efisiensi birokrasi melalui:", options: ["Otomatisasi proses administrasi", "Menambah pekerjaan", "Menghapus arsip", "Mengganti pimpinan"], answer: "Otomatisasi proses administrasi", explanation: "Otomatisasi mempercepat proses administrasi." },
+
+    { topic: "Digital Mindset", type: "single", question: "Transformasi digital bertujuan untuk menciptakan layanan publik yang:", options: ["Lambat tapi pasti", "Efektif dan responsif", "Rumit", "Manual"], answer: "Efektif dan responsif", explanation: "Teknologi digunakan untuk meningkatkan kualitas pelayanan publik." },
+
+    { topic: "Digital Mindset", type: "single", question: "Kolaborasi manusia dan AI akan menghasilkan pelayanan yang:", options: ["Berbasis data", "Berbasis tebakan", "Lebih lambat", "Lebih mahal"], answer: "Berbasis data", explanation: "AI membantu analisis data sehingga keputusan lebih tepat." },
+
+    { topic: "Digital Mindset", type: "single", question: "Transformasi digital dalam birokrasi bukan hanya soal teknologi, tetapi juga perubahan:", options: ["Warna kantor", "Pola pikir dan cara kerja", "Jumlah komputer", "Lokasi server"], answer: "Pola pikir dan cara kerja", explanation: "Transformasi digital memerlukan perubahan paradigma kerja." }
+];
+
+        function QuizApp() {
+            const [current, setCurrent] = useState(0);
+            const [selected, setSelected] = useState(null);
+            const [submitted, setSubmitted] = useState(false);
+            const [score, setScore] = useState(0);
+            const [finished, setFinished] = useState(false);
+
+            const q = questionsData[current];
+
+            const handleSubmit = () => {
+                if (selected === q.answer) setScore(score + 1);
+                setSubmitted(true);
+            };
+
+            const handleNext = () => {
+                if (current + 1 < questionsData.length) {
+                    setCurrent(current + 1);
+                    setSelected(null);
+                    setSubmitted(false);
+                } else {
+                    setFinished(true);
+                }
+            };
+
+            if (finished) {
+                const finalPercentage = Math.round((score / questionsData.length) * 100);
+                return (
+                    <div className="min-h-screen flex items-center justify-center p-4">
+                        <div className="bg-white p-8 md:p-12 rounded-[2rem] shadow-2xl quiz-container w-full text-center border border-gray-100">
+                            <img src="https://upload.wikimedia.org/wikipedia/id/thumb/0/0f/Logo_IPB.png/1280px-Logo_IPB.png?_=20250824044127" className="w-16 mx-auto mb-6" alt="IPB" />
+                            <h2 className="text-2xl font-extrabold text-[#002D5B] mb-2">Evaluasi Selesai</h2>
+                            <p className="text-gray-500 text-sm mb-8 font-medium">Berikut adalah hasil pencapaian Anda:</p>
+                            
+                            {/* Visual Progress Bar Skor */}
+                            <div className="relative pt-1 mb-8">
+                                <div className="flex mb-2 items-center justify-between">
+                                    <div>
+                                        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-50">
+                                            Skor Anda
+                                        </span>
+                                    </div>
+                                    <div className="text-right">
+                                        <span className="text-sm font-bold inline-block text-blue-600">
+                                            {finalPercentage}%
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="overflow-hidden h-4 mb-4 text-xs flex rounded-full bg-gray-100 shadow-inner">
+                                    <div style={{ width: `${finalPercentage}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ipb-gradient transition-all duration-1000"></div>
+                                </div>
+                                <p className="text-sm font-bold text-gray-700">Benar {score} dari {questionsData.length} soal</p>
+                            </div>
+
+                            <div className={`p-4 rounded-xl mb-8 ${finalPercentage >= 70 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'} text-sm font-semibold`}>
+                                {finalPercentage >= 70 ? '✓ Selamat! Anda memenuhi standar kelulusan modul ini.' : '✗ Skor Anda di bawah 70%. Silakan pelajari kembali modul.'}
+                            </div>
+
+                            <button onClick={() => window.location.reload()} className="w-full bg-[#002D5B] text-white py-4 rounded-2xl font-bold hover:shadow-xl transition-all active:scale-95">Ulangi Kuis</button>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen flex flex-col items-center py-8 px-4">
+                    {/* Header IPB */}
+                    <div className="quiz-container w-full mb-6 border-b-4 border-[#F2B300] bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <div className="ipb-gradient p-4 flex items-center gap-4">
+                            <div>
+                                <h1 className="text-white font-extrabold text-sm md:text-base leading-tight uppercase tracking-tight">Pelatihan Literasi AI</h1>
+                                <p className="text-blue-100 text-[10px] md:text-xs font-medium">IPB University — Digital Mindset ASN</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Main Content */}
+                    <div className="quiz-container w-full">
+                        <div className="bg-white p-6 md:p-10 rounded-[2rem] shadow-xl border border-gray-100 relative">
+                            {/* Label Topik */}
+                            <div className="inline-block px-3 py-1 bg-blue-50 text-[#002D5B] text-[9px] font-black uppercase tracking-widest rounded-full border border-blue-100 mb-6">
+                                {q.topic}
+                            </div>
+
+                            <h2 className="text-base md:text-lg font-bold text-gray-800 mb-8 leading-relaxed">
+                                {q.question}
+                            </h2>
+
+                            <div className="space-y-3">
+                                {q.options.map((opt, i) => {
+                                    const isSel = selected === opt;
+                                    const isCorrectAns = opt === q.answer;
+                                    
+                                    let btnClass = "w-full text-left p-4 rounded-xl text-sm font-semibold option-btn border-2 ";
+                                    if (submitted) {
+                                        if (isCorrectAns) btnClass += "border-green-500 bg-green-50 text-green-800 ring-2 ring-green-100";
+                                        else if (isSel) btnClass += "border-red-500 bg-red-50 text-red-800";
+                                        else btnClass += "border-gray-50 opacity-40";
+                                    } else {
+                                        btnClass += isSel ? "border-[#002D5B] bg-blue-50 text-[#002D5B] shadow-sm" : "border-gray-100 hover:bg-gray-50 text-gray-600";
+                                    }
+
+                                    return (
+                                        <button key={i} disabled={submitted} onClick={() => setSelected(opt)} className={btnClass}>
+                                            {opt}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Pembahasan */}
+                            {submitted && (
+                                <div className={`mt-8 p-4 rounded-2xl text-[11px] md:text-xs leading-relaxed border-l-4 animate-[fadeIn_0.3s_ease-out]
+                                    ${selected === q.answer ? 'bg-green-50 border-green-500 text-green-800' : 'bg-red-50 border-red-500 text-red-800'}`}>
+                                    <span className="font-bold uppercase tracking-widest block mb-1">Pembahasan:</span>
+                                    {q.explanation}
+                                </div>
+                            )}
+
+                            <div className="mt-10 flex flex-col gap-4">
+                                {!submitted ? (
+                                    <button onClick={handleSubmit} disabled={!selected} 
+                                        className={`w-full py-4 rounded-2xl font-bold text-white transition-all transform active:scale-95
+                                        ${!selected ? 'bg-gray-200 cursor-not-allowed' : 'bg-[#002D5B] shadow-lg shadow-blue-100'}`}>
+                                        Kirim Jawaban
+                                    </button>
+                                ) : (
+                                    <button onClick={handleNext} 
+                                        className="w-full bg-[#002D5B] text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transform active:scale-95 transition-all">
+                                        {current + 1 < questionsData.length ? 'Soal Berikutnya' : 'Selesaikan Kuis'}
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                    </button>
+                                )}
+                                
+                                <div className="text-center text-[10px] font-bold text-gray-400">
+                                    Pertanyaan {current + 1} dari {questionsData.length}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <footer className="mt-8 text-center opacity-30">
+                        <p className="text-[8px] font-black tracking-widest uppercase italic">PIC: Steven • Capstone Project IPB University © 2026</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<QuizApp />);
+    </script>
+</body>
+</html>
